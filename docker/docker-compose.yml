@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  
+  backend: &backend
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+      args: 
+        ENVIRONMENT: $ENVIRONMENT
+    environment:
+      ENVIRONMENT: $ENVIRONMENT
+    volumes:
+      - ../:/backend
+    restart: unless-stopped
