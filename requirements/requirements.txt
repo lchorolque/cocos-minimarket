@@ -10,3 +10,4 @@ Pygments==2.4.*
 django-filter==2.1.*
 drf-yasg
 drf-yasg[validation]
+pillow==7.2.*

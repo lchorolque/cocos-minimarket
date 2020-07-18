@@ -35,7 +35,8 @@ INSTALLED_APPS = [
 ]
 
 BACKEND_APPS = [
-    
+    'backend.products.apps.ProductsConfig',
+    'backend.stores.apps.StoresConfig'
 ]
 
 INSTALLED_APPS += BACKEND_APPS
