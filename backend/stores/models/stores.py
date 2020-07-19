@@ -16,4 +16,4 @@ class OpenTime(models.Model):
 class HoursRange(models.Model):
     start_hour = models.TimeField()
     end_hour = models.TimeField()
-    open_time = models.ForeignKey('OpenTime', related_name='hours_ranges', on_delete=models.CASCADE)
+    open_times = models.ManyToManyField('OpenTime', related_name='hours_ranges')

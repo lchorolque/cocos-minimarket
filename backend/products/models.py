@@ -3,7 +3,7 @@ from django.db import models
 
 class Product(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    prince = models.FloatField()
+    price = models.FloatField()
 
 
 class Category(models.Model):

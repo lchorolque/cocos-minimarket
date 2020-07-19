@@ -11,3 +11,5 @@ django-filter==2.1.*
 drf-yasg
 drf-yasg[validation]
 pillow==7.2.*
+pandas==0.25.*
+xlrd==1.2.*
