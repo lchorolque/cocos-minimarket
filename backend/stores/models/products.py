@@ -1,5 +1,6 @@
 from django.db import models
 from backend.date_utils import WEEKDAYS
+from datetime import datetime
 
 
 class Stock(models.Model):
@@ -30,6 +31,38 @@ class Voucher(models.Model):
     store = models.ForeignKey('Store', related_name='vouchers', on_delete=models.CASCADE)
     products = models.ManyToManyField('products.Product', related_name='vouchers')
 
+    def product_discounts(self, stocks):
+        def is_valid_today():
+            today = datetime.today()
+            if self.start_date <= today and self.end_date >= today:
+                if self.valid_weekdays.filter(weekday__in=today.weekday()):
+                    return True
+
+        def discount_amounts(stock):
+            price = stock.product.price
+            count = stock.count
+            total_amount = price * count
+            max_units = self.max_units
+
+            if max_units:   # set count like max_units
+                count = count if count < max_units else max_units
+
+            discountable_units = count // self.min_units
+            discountable_amount = price * self.discount
+            discount_amount = discountable_amount * discountable_units
+
+            return total_amount - discount_amount
+
+        discounts = {}
+        if is_valid_today():
+            #  filter availables stocks
+            available_stocks = stocks.objects.filter(product__in=self.products.all())
+
+            for stock in available_stocks:
+                discount_amount = discount_amounts(stock)
+                discounts[stock.product.id] = discount_amount
+
+        return discounts
 
 
 class ValidWeekday(models.Model):
@@ -39,3 +72,6 @@ class ValidWeekday(models.Model):
 
 class Cart(models.Model):
     owner = models.ForeignKey('auth.User', related_name='carts', on_delete=models.CASCADE)
+    store = models.ForeignKey('Store', related_name='carts', on_delete=models.CASCADE)
+    voucher = models.ForeignKey('Voucher', related_name='carts',
+                                null=True, on_delete=models.SET_NULL)
