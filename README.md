@@ -65,3 +65,24 @@ cd docker
 ```bash
 sh init_service.sh
 ```
+
+## 4 - Crear usuario
+
+Luego de tener el proyecto inicializado, crearemos un usuario para poder interactuar con la API.
+
+1 - Ubicarse en el proyecto COCOs MiniMarket Backend
+```bash
+cd cocos-minimarket
+``` 
+2 - Ubicarse en la raiz de configuracion Docker del proyecto
+```bash
+cd docker
+```
+3 - Ingresaremos al bash del backend
+```bash
+sh bash.sh
+```
+4 - correremos el siguiente comando y seguiremos los pasos
+```bash
+./manage.py createsuperuser
+```

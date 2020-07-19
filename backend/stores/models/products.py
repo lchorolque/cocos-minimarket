@@ -33,15 +33,16 @@ class Voucher(models.Model):
 
     def product_discounts(self, stocks):
         def is_valid_today():
-            today = datetime.today()
+            today = datetime.today().date()
             if self.start_date <= today and self.end_date >= today:
-                if self.valid_weekdays.filter(weekday__in=today.weekday()):
+                valid_weekdays = self.valid_weekdays.all().values_list('weekday', flat=True)
+                if not valid_weekdays or today.weekday() in valid_weekdays:   # not days is all days
                     return True
+            return False
 
         def discount_amounts(stock):
             price = stock.product.price
             count = stock.count
-            total_amount = price * count
             max_units = self.max_units
 
             if max_units:   # set count like max_units
@@ -51,12 +52,12 @@ class Voucher(models.Model):
             discountable_amount = price * self.discount
             discount_amount = discountable_amount * discountable_units
 
-            return total_amount - discount_amount
+            return discount_amount
 
         discounts = {}
         if is_valid_today():
             #  filter availables stocks
-            available_stocks = stocks.objects.filter(product__in=self.products.all())
+            available_stocks = stocks.filter(product__in=self.products.all())
 
             for stock in available_stocks:
                 discount_amount = discount_amounts(stock)

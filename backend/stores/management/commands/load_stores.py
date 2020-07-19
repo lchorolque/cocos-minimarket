@@ -2,6 +2,7 @@ from backend.stores.models import Store, OpenTime, HoursRange
 from backend.management.base import CustomBaseCommand
 import pandas as pd
 import json
+from django.core.files import File
 
 
 class Command(CustomBaseCommand):
@@ -19,11 +20,11 @@ class Command(CustomBaseCommand):
             store = Store(
                 name=row['name'],
                 address=row['address'],
-                logo=logo_path,
             )
+            store.logo.save(row['logo'], File(open(logo_path, 'rb')))  # store image in media
             store.save()
 
-            #   create open times for the store
+            #  create open times for the store
             open_times = json.loads(row['open_time'])
             for open_time in open_times:
                 #  create hours ranges

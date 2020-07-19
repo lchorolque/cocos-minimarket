@@ -3,6 +3,7 @@ from backend.stores.models import Store, StoreStock, Cart, Voucher, CartStock
 from backend.products.serializers import ProductSerializer
 from django.db.models import F, Sum, FloatField
 
+
 class StoreSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -22,7 +23,7 @@ class StoreStockSerializer(serializers.ModelSerializer):
 class UpdateCartSerializer(serializers.Serializer):
     voucher_code = serializers.CharField(required=False, allow_null=True,
                                          allow_blank=True, write_only=True)
-    product = serializers.IntegerField(required=False, write_only=True)
+    product = serializers.IntegerField(required=False, allow_null=True, write_only=True)
     add_product = serializers.BooleanField(default=True, write_only=True)
 
     def validate_voucher_code(self, value):
@@ -31,6 +32,8 @@ class UpdateCartSerializer(serializers.Serializer):
         """
         if value and not Voucher.objects.filter(code=value):
             raise serializers.ValidationError("Incorrect code of voucher")
+
+        return value
 
     def validate(self, data):
         """
@@ -45,7 +48,6 @@ class UpdateCartSerializer(serializers.Serializer):
     def update(self, instance, validated_data):
         voucher_code = validated_data['voucher_code']
         product_id = validated_data['product']
-
         if voucher_code:
             instance.voucher = Voucher.objects.get(code=voucher_code)
             instance.save()
