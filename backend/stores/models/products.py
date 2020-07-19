@@ -20,14 +20,16 @@ class CartStock(Stock):
 
 
 class Voucher(models.Model):
+    code = models.CharField(max_length=25, unique=True)  # TODO implement hash to auto generate
     description = models.CharField(max_length=255)
     start_date = models.DateField()
     end_date = models.DateField()
-    min_units = models.IntegerField()
-    max_units = models.IntegerField()
+    min_units = models.IntegerField(default=0)
+    max_units = models.IntegerField(null=True)
     discount = models.FloatField()
     store = models.ForeignKey('Store', related_name='vouchers', on_delete=models.CASCADE)
     products = models.ManyToManyField('products.Product', related_name='vouchers')
+
 
 
 class ValidWeekday(models.Model):

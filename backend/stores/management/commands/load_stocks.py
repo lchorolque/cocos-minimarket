@@ -33,4 +33,4 @@ class Command(CustomBaseCommand):
                     ))
         StoreStock.objects.bulk_create(stocks)
 
-        print('----stores load done----')
+        print('----stocks load done----')
