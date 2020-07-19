@@ -49,3 +49,19 @@ docker-compose build
 docker-compose up
 ```
  
+## 3 - Instanciación
+ 
+Luego de tener el proyecto construido y levantado por Docker, correremos el comando de inicialización para  instalar las migraciones y los fixtures de datos.
+
+1 - Ubicarse en el proyecto COCOs MiniMarket Backend
+```bash
+cd cocos-minimarket
+``` 
+2 - Ubicarse en la raiz de configuracion Docker del proyecto
+```bash
+cd docker
+```
+3 - Corremos el comando de inicialización
+```bash
+sh init_service.sh
+```

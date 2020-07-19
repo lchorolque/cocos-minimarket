@@ -4,7 +4,7 @@ import pandas as pd
 
 
 class Command(CustomBaseCommand):
-    default_file_name = 'load_products_n_categories.xlsx'
+    default_file_name = 'products_n_categories.xlsx'
 
     def handle(self, *args, **options):
         """
